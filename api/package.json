@@ -1,0 +1,25 @@
+{
+  "name": "duty-list-api",
+  "version": "1.0.0",
+  "description": "API for duty list",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node ./src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Zen LIU",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/uuid": "^9.0.8",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.4"
+  },
+  "dependencies": {
+    "@types/node": "^20.12.5",
+    "@types/pg": "^8.11.4",
+    "generic-pool": "^3.9.0",
+    "pg": "^8.11.5",
+    "ts-postgres": "^2.0.1",
+    "uuid": "^9.0.1"
+  }
+}

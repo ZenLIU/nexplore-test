@@ -1,0 +1,136 @@
+openapi: 3.0.0
+info:
+  title: Duty List API
+  description: API for duty list
+  version: 1.0.0
+servers:
+  - url: http:/localhost/v1
+    description: localhost server
+paths:
+  /duty-list/items:
+    get:
+      summary: Returns items of a duty list
+      description: Duty list contains multiple list items
+      responses:
+        '200': # status code
+          description: A JSON array of list items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: '#/components/schemas/DutyListItem'
+
+    post:
+      summary: Add item to duty list
+      description: Add item to duty list
+      requestBody:
+        description: Item name
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200': # status code
+          description: Success or fail for the add item action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errMsg:
+                    type: string
+  /duty-list/items/{id}:
+    put:
+      summary: Update a duty item
+      description: Update the name of duty item with item id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Item id
+      responses:
+        '200': # status code
+          description: Success or fail for the add item action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errMsg:
+                    type: string
+        '403':
+          description: Duty item id not found or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errMsg:
+                    type: string
+        '404':
+          description: Duty item not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errMsg:
+                    type: string
+    delete:
+      summary: Delete a duty item
+      description: Delete a duty item with item id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Item id
+      responses:
+        '200': # status code
+          description: Success or fail for the delete item action
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errMsg:
+                    type: string
+        '404':
+          description: Duty item not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errMsg:
+                    type: string
+components:
+  schemas:
+    DutyListItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
