@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import "./css/base.css";
 
-function AddDuty() {
+function AddDuty(props: { refreshData: () => Promise<void> }) {
     console.log("render");
     // const [dutyName, setDutyName] = useState<string>("");
     const dutyNameRef = useRef<HTMLInputElement>(null);
@@ -30,6 +30,34 @@ function AddDuty() {
             setErrMsgCSS("err-msg");
         } else {
             //call API to add item
+            fetch(import.meta.env.VITE_API_HOST + '/v1/duty-list/items', {
+                method: "POST", // *GET, POST, PUT, DELETE, etc.            
+                headers: {
+                    "Content-Type": "application/json",
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify({ name: dutyName }), // body data type must match "Content-Type" header
+            }).then((response) => {
+                console.log(response);
+                response.json().then((data: { success: boolean, err_msg: string }) => {
+                    if (data.success) {
+                        props.refreshData().then(
+                            () => {
+                                window.alert("Add success.");
+
+                                //clear the textbox
+                                if (dutyNameRef.current != null) {
+                                    dutyNameRef.current.value = "";
+                                }
+                            }
+                        ).catch(() => { });
+                    } else {
+                        window.alert("Add failed.");
+                    }
+                }).catch(() => { });
+            }).catch(() => {
+                window.alert("Add failed.");
+            });
         }
     }
 }

@@ -50,8 +50,24 @@ const myServer = http.createServer((req, res) => {
 		);
 	}
 
+	//for preflight
+	if (req.method == 'OPTIONS') {
+		res.writeHead(200, {
+			'Content-Type': 'application/json',
+			'Access-Control-Allow-Origin': 'http://localhost:8080',
+			'Access-Control-Allow-Methods': '*',
+			'Access-Control-Allow-Headers': 'Content-Type',
+		});
+		res.end();
+		return;
+	}
+
 	//not found
-	res.writeHead(404);
+	res.writeHead(404, {
+		'Content-Type': 'application/json',
+		'Access-Control-Allow-Origin': 'http://localhost:8080',
+		'Access-Control-Allow-Methods': '*',
+	});
 	res.end('resource not found.');
 });
 

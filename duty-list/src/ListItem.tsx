@@ -1,9 +1,9 @@
-import UpdateButton from "./UpdateButton";
-import DeleteButton from "./DeleteButton";
+// import UpdateButton from "./UpdateButton";
+// import DeleteButton from "./DeleteButton";
 import { useEffect, useRef, useState } from "react";
 
-function ListItem(props: { id: string }) {
-    const [dutyName, setDutyName] = useState<string>("item1");
+function ListItem(props: { id: string, name: string, key: string, refreshData: () => Promise<void> }) {
+    const [dutyName, setDutyName] = useState<string>(props.name);
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const txtDutyRef = useRef<HTMLInputElement>(null);
 
@@ -19,16 +19,43 @@ function ListItem(props: { id: string }) {
         );
     } else {
         return (
-            <li>{dutyName} < UpdateButton onClick={editItem} /><DeleteButton /></li>
+            <li>{dutyName} <button onClick={editItem}>Update</button><button onClick={deleteItem}>Delete</button></li>
 
         );
+    }
+
+    function deleteItem() {
+        if (confirm('Confirm to delete item?')) {
+            fetch(import.meta.env.VITE_API_HOST + '/v1/duty-list/items/' + props.id, {
+                method: "DELETE", // *GET, POST, PUT, DELETE, etc.            
+                headers: {
+                    "Content-Type": "application/json",
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            }).then((response) => {
+                console.log(response);
+                response.json().then((data: { success: boolean, err_msg: string }) => {
+                    if (data.success) {
+                        // setDutyName(dutyName);                                                
+                        props.refreshData().then(
+                            () => {
+                                window.alert("Delete success.");
+                            }
+                        ).catch(() => { });
+                    } else {
+                        window.alert("Delete failed.");
+                    }
+                }).catch(() => { });
+            }).catch(() => {
+                window.alert("Delete failed.");
+            });
+        }
     }
 
     function editItem(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         console.log(e);
         console.log("Update id:" + props.id);
         setIsEditMode(true);
-        // txtDutyRef.current!.value = "item1";
     }
 
     function cancelEdit() {
@@ -39,9 +66,31 @@ function ListItem(props: { id: string }) {
         console.log("Save button click");
         const dutyName: string = (txtDutyRef.current != null) ? txtDutyRef.current.value : "";
         console.log("Duty Name: " + dutyName);
-        setDutyName(dutyName);
+
         //cal API to save
-        setIsEditMode(false);
+        console.log(import.meta.env.VITE_API_HOST + '/v1/duty-list/items/' + props.id);
+        fetch(import.meta.env.VITE_API_HOST + '/v1/duty-list/items/' + props.id, {
+            method: "PUT", // *GET, POST, PUT, DELETE, etc.            
+            headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({ name: dutyName }), // body data type must match "Content-Type" header
+        }).then((response) => {
+            console.log(response);
+            response.json().then((data: { success: boolean, err_msg: string }) => {
+                if (data.success) {
+                    setDutyName(dutyName);
+                    window.alert("Update success.");
+                } else {
+                    window.alert("Update failed.");
+                }
+                setIsEditMode(false);
+            }).catch(() => { });
+        }).catch(() => {
+            window.alert("Update failed.");
+            setIsEditMode(false);
+        });
     }
 }
 

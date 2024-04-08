@@ -1,11 +1,9 @@
-// import { connect } from 'ts-postgres';
-// import type { Client } from 'ts-postgres';
 import { Pool } from 'pg';
 import { config } from './configuration/config';
 
 export class DBClient {
 	private static pool: Pool;
-	private constructor() {}
+	private constructor() {} //prevent create an object
 
 	public static getPool(): Pool {
 		if (DBClient.pool == null) {
@@ -20,11 +18,11 @@ export class DBClient {
 				connectionTimeoutMillis: 2000,
 			});
 
-			DBClient.pool.on('error', function (err) {
-				//log stuff maybe
-				console.error('error occur in getPool()');
-				console.error(err);
-			});
+			// DBClient.pool.on('error', function (err) {
+			// 	//log stuff maybe
+			// 	console.error('error occur in getPool()');
+			// 	console.error(err);
+			// });
 		}
 		return DBClient.pool;
 	}

@@ -5,7 +5,7 @@ export function getLocalConfig(processVariables: ProcessVariables): Config {
 		environment: 'local',
 		port: 1234,
 		version: 'v1',
-		db_host: 'localhost',
+		db_host: 'postgresql',
 		db_port: 5432,
 		db_username: 'postgres',
 		db_pw: 'password',

@@ -9,12 +9,20 @@ const getDutyListItems = async (req: IncomingMessage, res: ServerResponse) => {
 	try {
 		//get data from db
 		const items: DutyListItem[] = await DutyService.getListItems();
-		res.writeHead(200, { 'Content-Type': 'application/json' });
+		res.writeHead(200, {
+			'Content-Type': 'application/json',
+			'Access-Control-Allow-Origin': 'http://localhost:8080',
+			'Access-Control-Allow-Methods': '*',
+		});
 		res.write(JSON.stringify(items));
 	} catch (e) {
 		console.log('catch in getDutyListItems()');
 		console.error(e);
-		res.writeHead(500, { 'Content-Type': 'application/json' });
+		res.writeHead(500, {
+			'Content-Type': 'application/json',
+			'Access-Control-Allow-Origin': 'http://localhost:8080',
+			'Access-Control-Allow-Methods': '*',
+		});
 		res.write(JSON.stringify({ err_msg: 'Internal error' }));
 	}
 	res.end();
@@ -36,12 +44,20 @@ const addDutyListItem = async (req: IncomingMessage, res: ServerResponse) => {
 			if (body.name != null && body.name != '') {
 				try {
 					await DutyService.addListItem(body.name);
-					res.writeHead(200, { 'Content-Type': 'application/json' });
+					res.writeHead(200, {
+						'Content-Type': 'application/json',
+						'Access-Control-Allow-Origin': 'http://localhost:8080',
+						'Access-Control-Allow-Methods': '*',
+					});
 					res.write(JSON.stringify({ success: true, errMsg: '' }));
 				} catch (addErr) {
 					console.log('catch in addDutyListItem()');
 					console.error(addErr);
-					res.writeHead(500, { 'Content-Type': 'application/json' });
+					res.writeHead(500, {
+						'Content-Type': 'application/json',
+						'Access-Control-Allow-Origin': 'http://localhost:8080',
+						'Access-Control-Allow-Methods': '*',
+					});
 					res.write(
 						JSON.stringify({ success: false, err_msg: 'Internal error' }),
 					);
@@ -52,7 +68,11 @@ const addDutyListItem = async (req: IncomingMessage, res: ServerResponse) => {
 		} catch (err) {
 			console.log('catch in addDutyListItem()');
 			console.error(err);
-			res.writeHead(403, { 'Content-Type': 'application/json' });
+			res.writeHead(403, {
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': 'http://localhost:8080',
+				'Access-Control-Allow-Methods': '*',
+			});
 			res.write(JSON.stringify({ success: false, err_msg: 'Invalid input' }));
 		}
 		res.end();
@@ -82,10 +102,18 @@ const updateDutyListItem = async (
 				if (body.name != null && body.name != '') {
 					try {
 						if (await DutyService.updateListItem(itemId!, body.name)) {
-							res.writeHead(200, { 'Content-Type': 'application/json' });
+							res.writeHead(200, {
+								'Content-Type': 'application/json',
+								'Access-Control-Allow-Origin': 'http://localhost:8080',
+								'Access-Control-Allow-Methods': '*',
+							});
 							res.write(JSON.stringify({ success: true, errMsg: '' }));
 						} else {
-							res.writeHead(200, { 'Content-Type': 'application/json' });
+							res.writeHead(200, {
+								'Content-Type': 'application/json',
+								'Access-Control-Allow-Origin': 'http://localhost:8080',
+								'Access-Control-Allow-Methods': '*',
+							});
 							res.write(
 								JSON.stringify({ success: false, errMsg: 'Item id not found' }),
 							);
@@ -93,7 +121,11 @@ const updateDutyListItem = async (
 					} catch (addErr) {
 						console.log('catch in updateDutyListItem()');
 						console.error(addErr);
-						res.writeHead(500, { 'Content-Type': 'application/json' });
+						res.writeHead(500, {
+							'Content-Type': 'application/json',
+							'Access-Control-Allow-Origin': 'http://localhost:8080',
+							'Access-Control-Allow-Methods': '*',
+						});
 						res.write(
 							JSON.stringify({ success: false, err_msg: 'Internal error' }),
 						);
@@ -104,7 +136,11 @@ const updateDutyListItem = async (
 			} catch (err) {
 				console.log('catch in updateDutyListItem()');
 				console.error(err);
-				res.writeHead(403, { 'Content-Type': 'application/json' });
+				res.writeHead(403, {
+					'Content-Type': 'application/json',
+					'Access-Control-Allow-Origin': 'http://localhost:8080',
+					'Access-Control-Allow-Methods': '*',
+				});
 				res.write(JSON.stringify({ success: false, err_msg: 'Invalid input' }));
 			}
 			res.end();
@@ -124,10 +160,18 @@ const deleteDutyListItem = async (
 		//delete data from db
 		try {
 			if (await DutyService.deleteListItem(itemId!)) {
-				res.writeHead(200, { 'Content-Type': 'application/json' });
+				res.writeHead(200, {
+					'Content-Type': 'application/json',
+					'Access-Control-Allow-Origin': 'http://localhost:8080',
+					'Access-Control-Allow-Methods': '*',
+				});
 				res.write(JSON.stringify({ success: true, errMsg: '' }));
 			} else {
-				res.writeHead(200, { 'Content-Type': 'application/json' });
+				res.writeHead(200, {
+					'Content-Type': 'application/json',
+					'Access-Control-Allow-Origin': 'http://localhost:8080',
+					'Access-Control-Allow-Methods': '*',
+				});
 				res.write(
 					JSON.stringify({ success: false, errMsg: 'Item id not found' }),
 				);
@@ -135,7 +179,11 @@ const deleteDutyListItem = async (
 		} catch (err) {
 			console.log('catch in deleteDutyListItem()');
 			console.error(err);
-			res.writeHead(500, { 'Content-Type': 'application/json' });
+			res.writeHead(500, {
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': 'http://localhost:8080',
+				'Access-Control-Allow-Methods': '*',
+			});
 			res.write(JSON.stringify({ success: false, err_msg: 'Internal error' }));
 		}
 		res.end();
@@ -160,7 +208,11 @@ const validateItemId = (
 ): boolean => {
 	if (itemId == null || itemId == '') {
 		//invalid item id
-		res.writeHead(403, { 'Content-Type': 'application/json' });
+		res.writeHead(403, {
+			'Content-Type': 'application/json',
+			'Access-Control-Allow-Origin': 'http://localhost:8080',
+			'Access-Control-Allow-Methods': '*',
+		});
 		res.write(JSON.stringify({ success: false, err_msg: 'Invalid input' }));
 		res.end();
 		return false;
@@ -169,7 +221,11 @@ const validateItemId = (
 			uuidParse(itemId);
 		} catch (err) {
 			//invalid item id
-			res.writeHead(403, { 'Content-Type': 'application/json' });
+			res.writeHead(403, {
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': 'http://localhost:8080',
+				'Access-Control-Allow-Methods': '*',
+			});
 			res.write(
 				JSON.stringify({
 					success: false,

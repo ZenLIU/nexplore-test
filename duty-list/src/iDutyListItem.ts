@@ -4,4 +4,4 @@ interface DutyListItem {
 	name: string;
 }
 
-export { DutyListItem };
+export type { DutyListItem };

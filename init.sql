@@ -1,4 +1,4 @@
-create database nexplore_test;
+-- create database nexplore_test;
 
 create table duty_list (
     id UUID DEFAULT gen_random_uuid(),
